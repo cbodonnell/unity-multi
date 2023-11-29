@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
@@ -9,25 +10,18 @@ public class Builder
         // Set architecture in BuildSettings
         EditorUserBuildSettings.selectedEmbeddedLinuxArchitecture = architecture;
 
-        // Setup build options (e.g. scenes, build output location)
-        var options = new BuildPlayerOptions
+        string locationPathName = "Build/Windows/MultiplayerIntro.exe";
+
+        string[] scenes = new[]
         {
-            // Change to scenes from your project
-            scenes = new[]
-            {
-                "Assets/Scenes/SampleScene.unity",
-            },
-            // Change to location the output should go
-            locationPathName = "Build/EmbeddedLinux",
-            options =  BuildOptions.CleanBuildCache | BuildOptions.StrictMode,
-            target = BuildTarget.EmbeddedLinux
+            "Assets/Scenes/SampleScene.unity",
         };
 
-        var report = BuildPipeline.BuildPlayer(options);
+        var report = BuildPipeline.BuildPlayer(scenes, locationPathName, BuildTarget.StandaloneWindows64, BuildOptions.None);
 
         if (report.summary.result == BuildResult.Succeeded)
         {
-            Debug.Log($"Build successful - Build written to {options.locationPathName}");
+            Debug.Log($"Build successful - Build written to {locationPathName}");
         }
         else if (report.summary.result == BuildResult.Failed)
         {
